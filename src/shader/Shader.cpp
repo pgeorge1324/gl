@@ -108,3 +108,12 @@ void Shader::setFloat4(const std::string &name, float value1, float value2, floa
 void Shader::setMatrix4fv(const std::string &name, glm::mat4 &trans) const {
     glUniformMatrix4fv(glGetUniformLocation(ID,name.c_str()),1,GL_FALSE,glm::value_ptr(trans));
 }
+
+void Shader::setVec3(const std::string &name, glm::vec3 vec) const {
+    glUniformMatrix3fv(glGetUniformLocation(ID,name.c_str()),1,GL_FALSE,glm::value_ptr(vec));
+}
+
+void Shader::setVec3(const std::string &name, float x, float y, float z) const {
+    const glm::vec3 vec = glm::vec3 (x,y,z);
+    glUniformMatrix3fv(glGetUniformLocation(ID,name.c_str()),1,GL_FALSE,glm::value_ptr(vec));
+}
