@@ -9,6 +9,7 @@
 #include "include/glm/gtc/type_ptr.hpp"
 #include "src/model/hexagon/hexagon.h"
 #include "src/model/square/square.h"
+#include "src/camera/Camera.h"
 
 /**
  * 窗口大小调增回调函数
@@ -20,12 +21,24 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 void processInput(GLFWwindow *window, const Shader &shader, int &_percent);
 
-void cameraInput(GLFWwindow *window, const Shader &shader, glm::vec3 &cameraPos, glm::vec3 &cameraFront,
-                 glm::vec3 &cameraUp, float d);
+void processInput(GLFWwindow *window);
+
+void cameraInput(GLFWwindow *window);
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+// camera
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
+float deltaTime = 0.0f; // 当前帧与上一帧的时间差
+float lastFrame = 0.0f; // 上一帧的时间
 
 // 顶点着色器（vertex shader）-> 图元装配（shape assembly） -> 几何着色器（geometry shader）
 // ->光栅化（rasterization） -> 片段着色器（fragment shader） -> 测试与混合（test and blending）
@@ -50,6 +63,10 @@ int main() {
     }
     // 将当前窗口设置为当前线程的主上下文
     glfwMakeContextCurrent(window);
+    // 注册窗口调节回调函数
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     // 初始化GLAD
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
@@ -146,18 +163,8 @@ int main() {
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // 注册窗口调节回调函数
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
     int _float = 1;
     ourShader.setFloat("fPercent", _float * 0.01);
-
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    float deltaTime = 0.0f; // 当前帧与上一帧的时间差
-    float lastFrame = 0.0f; // 上一帧的时间
 
     // 渲染循环
     while (!glfwWindowShouldClose(window)) {
@@ -169,8 +176,8 @@ int main() {
 
         // input
         // -----
-        processInput(window, ourShader, _float);// 输入
-        cameraInput(window, ourShader, cameraPos, cameraFront, cameraUp, deltaTime);
+        processInput(window);// 输入
+        cameraInput(window);
 
         // 清除深度缓冲
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -198,22 +205,12 @@ int main() {
 //        ourShader.setMatrix4fv("model", model);
 
         // 摄像机平移 【观察矩阵】
-//        glm::mat4 view = glm::mat4(1.0f);
-//        // 注意，我们将矩阵向我们要进行移动场景的反方向移动
-//        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-        float radius = 20.0f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camZ = cos(glfwGetTime()) * radius;
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-//        view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+        glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMatrix4fv("view", view);
-
 
         // 摄像机透视方法 【投影矩阵】
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(45.0f), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
         ourShader.setMatrix4fv("projection", projection);
 
         // draw our first triangle
@@ -255,6 +252,20 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, 600, 600);// 左下角X 左下角Y 宽度 高度
 }
 
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+}
+
 void processInput(GLFWwindow *window, const Shader &shader, int &_percent) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
@@ -267,15 +278,40 @@ void processInput(GLFWwindow *window, const Shader &shader, int &_percent) {
     }
 }
 
-void cameraInput(GLFWwindow *window, const Shader &shader, glm::vec3 &cameraPos, glm::vec3 &cameraFront,
-                 glm::vec3 &cameraUp, float d) {
-    float cameraSpeed = 0.2f * d; // adjust accordingly
+void cameraInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(FORWARD,deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(BACKWARD,deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(LEFT,deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(RIGHT,deltaTime);
+}
+
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    camera.ProcessMouseScroll(yoffset);
 }
