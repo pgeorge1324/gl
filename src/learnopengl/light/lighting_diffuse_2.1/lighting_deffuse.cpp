@@ -42,7 +42,7 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 1.5f, -2.0f);
 
 // 顶点着色器（vertex shader）-> 图元装配（shape assembly） -> 几何着色器（geometry shader）
 // ->光栅化（rasterization） -> 片段着色器（fragment shader） -> 测试与混合（test and blending）
@@ -175,6 +175,10 @@ int main() {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+        lightPos.z = sin(glfwGetTime() / 2.0f) * 1.0f;
+        lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+
         // input
         // -----
         processInput(window);// 输入
@@ -192,6 +196,7 @@ int main() {
         lightShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
         lightShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightShader.setVec3("lightPos", lightPos);
+        lightShader.setVec3("viewPos", camera.Position);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
