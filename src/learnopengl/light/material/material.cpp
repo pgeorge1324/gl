@@ -2,15 +2,15 @@
 #include <cmath>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "src/shader/Shader.h"
-#include "include/image/image.h"
-#include "include/glm/glm.hpp"
-#include "include/glm/gtc/matrix_transform.hpp"
-#include "include/glm/gtc/type_ptr.hpp"
-#include "src/model/hexagon/hexagon.h"
-#include "src/model/square/square.h"
-#include "src/camera/Camera.h"
-#include "src/model/light/light.h"
+#include "../src/classes/shader/Shader.h"
+#include <image/stb_image.h>
+#include "../include/glm/glm.hpp"
+#include "../include/glm/gtc/matrix_transform.hpp"
+#include "../include/glm/gtc/type_ptr.hpp"
+#include "../src/model/hexagon/hexagon.h"
+#include "../src/model/square/square.h"
+#include "../src/classes/camera/Camera.h"
+#include "../src/model/light/light.h"
 
 /**
  * 窗口大小调增回调函数
@@ -82,8 +82,8 @@ int main() {
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    Shader lightShader = Shader("../src/shaders/material/shader.vs", "../src/shaders/material/shader.fs");
-    Shader cubeShader = Shader("../src/shaders/material/cubeShader.vs", "../src/shaders/material/cubeShader.fs");
+    Shader lightShader = Shader("../src/learnopengl/light/material/shader.vs", "../src/learnopengl/light/material/shader.fs");
+    Shader cubeShader = Shader("../src/learnopengl/light/material/cubeShader.vs", "../src/learnopengl/light/material/cubeShader.fs");
 
 
 
