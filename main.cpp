@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "src/shader/Shader.h"
-#include "include/image/image.h"
+#include <image/stb_image.h>
 #include "include/glm/glm.hpp"
 #include "include/glm/gtc/matrix_transform.hpp"
 #include "include/glm/gtc/type_ptr.hpp"
