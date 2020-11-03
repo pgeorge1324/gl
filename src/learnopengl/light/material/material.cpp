@@ -26,8 +26,9 @@ void processInput(GLFWwindow *window);
 
 void cameraInput(GLFWwindow *window);
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -46,6 +47,7 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 // 顶点着色器（vertex shader）-> 图元装配（shape assembly） -> 几何着色器（geometry shader）
 // ->光栅化（rasterization） -> 片段着色器（fragment shader） -> 测试与混合（test and blending）
+// todo unknown debug fatal in this file
 
 int main() {
 
@@ -82,8 +84,10 @@ int main() {
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    Shader lightShader = Shader("../src/learnopengl/light/material/shader.vs", "../src/learnopengl/light/material/shader.fs");
-    Shader cubeShader = Shader("../src/learnopengl/light/material/cubeShader.vs", "../src/learnopengl/light/material/cubeShader.fs");
+    Shader lightShader = Shader("../src/learnopengl/light/material/shader.vs",
+                                "../src/learnopengl/light/material/shader.fs");
+    Shader cubeShader = Shader("../src/learnopengl/light/material/cubeShader.vs",
+                               "../src/learnopengl/light/material/cubeShader.fs");
 
 
 
@@ -100,10 +104,10 @@ int main() {
     glBindVertexArray(cubeVAO);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
 
@@ -114,7 +118,7 @@ int main() {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     // ------------------------------------------------------------------
 
@@ -172,8 +176,8 @@ int main() {
 
 
         float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+//        deltaTime = currentFrame - lastFrame;
+//        lastFrame = currentFrame;
 
         // input
         // -----
@@ -197,7 +201,7 @@ int main() {
         lightColor.x = sin(glfwGetTime() * 2.0f);
         lightColor.y = sin(glfwGetTime() * 0.7f);
         lightColor.z = sin(glfwGetTime() * 1.3f);
-        glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
         glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
         lightShader.setVec3("light.ambient", ambientColor);
         lightShader.setVec3("light.diffuse", diffuseColor);
@@ -206,11 +210,13 @@ int main() {
         // material properties
         lightShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
         lightShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
+        lightShader.setVec3("material.specular", 0.5f, 0.5f,
+                            0.5f); // specular lighting doesn't have full effect on this object's material
         lightShader.setFloat("material.shininess", 32.0f);
 
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f,
+                                                100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         lightShader.setMatrix4fv("projection", projection);
         lightShader.setMatrix4fv("view", view);
@@ -288,21 +294,19 @@ void processInput(GLFWwindow *window, const Shader &shader, int &_percent) {
 
 void cameraInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD,deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD,deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT,deltaTime);
+        camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT,deltaTime);
+        camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (firstMouse)
-    {
+void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -319,7 +323,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
 }

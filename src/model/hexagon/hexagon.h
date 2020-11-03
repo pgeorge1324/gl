@@ -5,7 +5,7 @@
 #ifndef GL_HEXAGON_H
 #define GL_HEXAGON_H
 
-namespace model_hexagon{
+namespace model_hexagon {
     float vertices[] = {
             //     ---- 位置 ----       ---- 颜色 ----          - 纹理坐标 -
             -0.29f, 0.5f, 0.0f, 1.0f, 0.5f, 1.0f, 0.25f, 1.0f,

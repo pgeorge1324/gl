@@ -29,8 +29,9 @@ void processInput(GLFWwindow *window);
 
 void cameraInput(GLFWwindow *window);
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -284,21 +285,19 @@ void processInput(GLFWwindow *window, const Shader &shader, int &_percent) {
 
 void cameraInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD,deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD,deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT,deltaTime);
+        camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT,deltaTime);
+        camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (firstMouse)
-    {
+void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -315,7 +314,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
 }
