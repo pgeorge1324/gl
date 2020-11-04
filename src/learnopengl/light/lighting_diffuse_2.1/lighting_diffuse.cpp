@@ -77,8 +77,8 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader = Shader("../src/learnopengl/light/material/shader.vs","../src/learnopengl/light/material/shader.fs");
-    Shader lightCubeShader = Shader("../src/learnopengl/light/material/cubeShader.vs","../src/learnopengl/light/material/cubeShader.fs");
+    Shader lightingShader = Shader("../src/learnopengl/light/lighting_diffuse_2.1/shader.vs","../src/learnopengl/light/lighting_diffuse_2.1/shader.fs");
+    Shader lightCubeShader = Shader("../src/learnopengl/light/lighting_diffuse_2.1/cubeShader.vs","../src/learnopengl/light/lighting_diffuse_2.1/cubeShader.fs");
 
     // first, configure the cube's VAO (and VBO)
     unsigned int VBO, cubeVAO;
@@ -133,7 +133,6 @@ int main()
         lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
         lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("lightPos", lightPos);
-        lightingShader.setVec3("viewPos", camera.Position);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);

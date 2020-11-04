@@ -13,8 +13,8 @@ target_link_libraries(gl ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
 #####################################################################
 
 #####################################################################
-add_executable(lightDiffuse src/learnopengl/light/lighting_diffuse_2.1/lighting_deffuse.cpp src/glad.c src/stb_image.cpp src/classes/shader/Shader.cpp src/classes/shader/Shader.h src/classes/camera/Camera.cpp src/classes/camera/Camera.h)
-target_link_libraries(lightDiffuse ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
+add_executable(lighting_diffuse src/learnopengl/light/lighting_diffuse_2.1/lighting_diffuse.cpp src/glad.c src/stb_image.cpp src/classes/shader/Shader.cpp src/classes/shader/Shader.h src/classes/camera/Camera.cpp src/classes/camera/Camera.h src/model/light/light.h)
+target_link_libraries(lighting_diffuse ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
 #target_link_libraries(lightDiffuse ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
 #####################################################################
 
