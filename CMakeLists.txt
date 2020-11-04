@@ -44,6 +44,24 @@ target_link_libraries(depth_testing ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
 #target_link_libraries(depth_testing ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
 #####################################################################
 
+#####################################################################
+add_executable(stencil_testing src/learnopengl/stencil_testing/stencil_testing.cpp src/glad.c src/stb_image.cpp)
+target_link_libraries(stencil_testing ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
+#target_link_libraries(stencil_testing ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
+#####################################################################
+
+#####################################################################
+add_executable(blending_discard src/learnopengl/blending_discard/blending_discard.cpp src/glad.c src/stb_image.cpp)
+target_link_libraries(blending_discard ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
+#target_link_libraries(blending_discard ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
+#####################################################################
+
+#####################################################################
+add_executable(frame_buffer src/learnopengl/frame_buffer/frame_buffer.cpp src/glad.c src/stb_image.cpp)
+target_link_libraries(frame_buffer ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
+#target_link_libraries(frame_buffer ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
+#####################################################################
+
 
 
 
