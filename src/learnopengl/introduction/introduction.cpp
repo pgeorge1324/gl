@@ -10,10 +10,8 @@
 #include "../include/glm/glm.hpp"
 #include "../include/glm/gtc/matrix_transform.hpp"
 #include "../include/glm/gtc/type_ptr.hpp"
-#include "../src/model/hexagon/hexagon.h"
-#include "../src/model/square/square.h"
+#include <model/square/square.h>
 #include "../src/classes/camera/Camera.h"
-#include "../src/model/light/light.h"
 
 /**
  * 窗口大小调增回调函数

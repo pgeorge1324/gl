@@ -5,7 +5,7 @@
 #ifndef GL_SQUARE_H
 #define GL_SQUARE_H
 
-#include "../include/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 namespace model_square{
     float vertices[] = {

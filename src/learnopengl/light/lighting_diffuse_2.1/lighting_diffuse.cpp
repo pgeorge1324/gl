@@ -7,7 +7,7 @@
 
 #include "../../../classes/shader/Shader.h"
 #include "../../../classes/camera/Camera.h"
-#include "../../../model/light/light.h"
+#include <model/light/light.h>
 
 #include <iostream>
 
