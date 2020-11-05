@@ -80,7 +80,7 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader shader("../src/learnopengl/depth_testing/stencil_testing.vs", "../src/learnopengl/depth_testing/depth_testing.fs");
+    Shader shader("../src/learnopengl/depth_testing/depth_testing.vs", "../src/learnopengl/depth_testing/depth_testing.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
