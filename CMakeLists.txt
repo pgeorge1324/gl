@@ -62,6 +62,19 @@ target_link_libraries(frame_buffer ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
 #target_link_libraries(frame_buffer ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
 #####################################################################
 
+#####################################################################
+add_executable(skybox src/learnopengl/skybox/skybox.cpp src/glad.c src/stb_image.cpp)
+target_link_libraries(skybox ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
+#target_link_libraries(skybox ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
+#####################################################################
+
+#####################################################################
+add_executable(asteroids_instanced src/learnopengl/asteroids_instanced/asteroids_instanced.cpp src/glad.c src/stb_image.cpp)
+target_link_libraries(asteroids_instanced ${PROJECT_SOURCE_DIR}/lib/glfw3.lib)
+target_link_libraries(asteroids_instanced ${PROJECT_SOURCE_DIR}/lib/assimp-vc140-mt.lib)
+#target_link_libraries(asteroids_instanced ${PROJECT_SOURCE_DIR}/dll/mingw/glfw3.dll)
+#####################################################################
+
 
 
 
