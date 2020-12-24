@@ -1,0 +1,34 @@
+{
+  "name": "gl",
+  "version": "1.0.0",
+  "description": "learning opengl",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pgeorge1324/gl.git"
+  },
+  "keywords": [
+    "opengl"
+  ],
+  "author": "kudo_shini",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pgeorge1324/gl/issues"
+  },
+  "homepage": "https://github.com/pgeorge1324/gl#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
