@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <model/light/light.h>
+#include <math.h>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -25,7 +26,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0f, 15.0f, 20.0f));
+Camera camera(glm::vec3(0.0f, 1.0f, 2.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -35,7 +36,9 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(-2.2f, 5.0f, 3.0f);
+glm::vec3 lightPos(0.0f, 5.0f, 3.0f);
+
+const double Pi = 3.141593;
 
 int main() {
     camera.MouseSensitivity = 0.1f;
@@ -83,13 +86,15 @@ int main() {
 
     // build and compile shaders
     // -------------------------
-    Shader ourShader("../src/learnopengl/model_loading/stylized.vs", "../src/learnopengl/model_loading/stylized.fs");
+    Shader ourShader("../src/learnopengl/model_loading/1.model_loading.vs",
+                     "../src/learnopengl/model_loading/1.model_loading.fs");
 //    Shader lightingShader = Shader("../src/learnopengl/light/lighting_diffuse_2.1/shader.vs","../src/learnopengl/light/lighting_diffuse_2.1/shader.fs");
     Shader lightCubeShader = Shader("../src/learnopengl/light/lighting_diffuse_2.1/cubeShader.vs",
                                     "../src/learnopengl/light/lighting_diffuse_2.1/cubeShader.fs");
 
     // load models
     // -----------
+//    Model ourModel("../resources/objects/dragon_stand/bunny.obj");
     Model ourModel("../resources/objects/nanosuit/nanosuit.obj");
 
     unsigned int VBO, lightCubeVAO;
@@ -159,7 +164,7 @@ int main() {
         model = glm::mat4(1.0f);
         model = glm::translate(model,
                                glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));    // it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));    // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
         ourModel.Draw(ourShader);
 
@@ -193,6 +198,23 @@ void processInput(GLFWwindow *window) {
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        lightPos.y += 0.2;
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        lightPos.y -= 0.2;
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        double angle = atan2(lightPos.x, lightPos.z) + 0.02;
+        lightPos.x = 3 * sin(angle);
+        lightPos.z =  3 * cos(angle);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        double angle = atan2(lightPos.x, lightPos.z) - 0.02;
+        lightPos.x = 3 * sin(angle);
+        lightPos.z =  3 * cos(angle);
+    }
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
