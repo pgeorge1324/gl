@@ -7,6 +7,8 @@ in vec3 FragPos;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
+uniform samplerCube skybox;
+
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -54,11 +56,15 @@ vec3 phoneShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sample
 vec3 rabbitShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sampler2D texture_diffuse1, sampler2D texture_specular1, vec2 TexCoords);
 vec3 stylizedShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sampler2D texture_diffuse1, sampler2D texture_specular1, vec2 TexCoords);
 vec3 sunlightShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sampler2D texture_diffuse1, sampler2D texture_specular1, vec2 TexCoords);
+vec3 refractShading(vec3 FragPos,vec3 viewPos,vec3 Normal, samplerCube skybox);
 
 void main() {
-    vec3 res = phoneShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
-    vec3 res1 = sunlightShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
-    FragColor = vec4(res + res1, 1.0);
+
+//    vec3 res = phoneShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
+//    vec3 res1 = sunlightShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
+    vec3 res1 = stylizedShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
+//    vec3 resRefract = refractShading( FragPos, viewPos, Normal, skybox);
+    FragColor = vec4(res1, 1.0);
 }
 
 vec3 phoneShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sampler2D texture_diffuse1, sampler2D texture_specular1, vec2 TexCoords){
@@ -146,4 +152,11 @@ vec3 sunlightShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sam
 
     vec3 result = diffuse + specular;
     return result;
+}
+
+vec3 refractShading(vec3 FragPos,vec3 viewPos,vec3 Normal, samplerCube skybox){
+    float ratio = 1.00 / 1.52;
+    vec3 I = normalize(FragPos - viewPos);
+    vec3 R = refract(I, normalize(Normal), ratio);
+    return vec3 (texture(skybox, R).rgb);
 }
