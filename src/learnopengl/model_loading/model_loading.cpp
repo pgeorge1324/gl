@@ -40,7 +40,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.0f, 3.0f, -5.0f);
+glm::vec3 lightPos(1.0f, 3.0f, 3.0f);
 
 const double Pi = 3.141593;
 

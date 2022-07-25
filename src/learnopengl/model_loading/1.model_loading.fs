@@ -60,11 +60,11 @@ vec3 refractShading(vec3 FragPos,vec3 viewPos,vec3 Normal, samplerCube skybox);
 
 void main() {
 
-//    vec3 res = phoneShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
-//    vec3 res1 = sunlightShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
-    vec3 res1 = stylizedShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
-//    vec3 resRefract = refractShading( FragPos, viewPos, Normal, skybox);
-    FragColor = vec4(res1, 1.0);
+    vec3 res = phoneShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
+//    vec3 res = sunlightShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
+//    vec3 res = stylizedShading(lightPos, FragPos, viewPos, Normal, texture_diffuse1, texture_specular1, TexCoords);
+//    vec3 res = refractShading( FragPos, viewPos, Normal, skybox);
+    FragColor = vec4(res, 1.0);
 }
 
 vec3 phoneShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sampler2D texture_diffuse1, sampler2D texture_specular1, vec2 TexCoords){
@@ -77,13 +77,13 @@ vec3 phoneShading(vec3 lightPos, vec3 FragPos, vec3 viewPos, vec3 Normal, sample
     vec3 lightDir = normalize(lightPos - FragPos);
 
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColor * vec3(texture(texture_diffuse1, TexCoords)) *0.5;
+    vec3 diffuse = diff * lightColor * vec3(texture(texture_diffuse1, TexCoords));
 
     //specular
     float specularStrength = 1.0;
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);
     vec3 specular = specularStrength * spec * lightColor * vec3(texture(texture_specular1, TexCoords));
 
     vec3 result = ambient + diffuse + specular;

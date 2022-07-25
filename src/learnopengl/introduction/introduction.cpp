@@ -42,6 +42,7 @@ float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
+int fPercent = 10;
 
 // 顶点着色器（vertex shader）-> 图元装配（shape assembly） -> 几何着色器（geometry shader）
 // ->光栅化（rasterization） -> 片段着色器（fragment shader） -> 测试与混合（test and blending）
@@ -180,6 +181,7 @@ int main() {
         // input
         // -----
         processInput(window);// 输入
+        processInput(window, ourShader, fPercent);
         cameraInput(window);
 
         // 清除深度缓冲
